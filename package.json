@@ -1,0 +1,12 @@
+{
+  "license": "UNLICENSED",
+  "scripts": {
+    "problem1": "ts-node src/problem1/index.ts",
+    "problem2": "ts-node src/problem2/index.ts",
+    "problem3": "ts-node src/problem3/index.ts"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}
