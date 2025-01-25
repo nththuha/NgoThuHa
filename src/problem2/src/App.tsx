@@ -1,30 +1,23 @@
-import { resolver, theme } from "@/configs/theme/mantine-theme";
-import guestRoutes from "@/router";
-import { LoadingOverlay, MantineProvider } from "@mantine/core";
-import { ModalsProvider } from "@mantine/modals";
-import { Notifications } from "@mantine/notifications";
-import { Suspense, useMemo } from "react";
-import { useRoutes } from "react-router-dom";
+import { MantineProvider } from '@mantine/core'
+import { resolver, theme } from '@/configs/themes'
+import { Notifications } from '@mantine/notifications'
+import { ModalsProvider } from '@mantine/modals'
+import { useRoutes } from 'react-router-dom'
+import routes from '@/routes'
+import { Suspense, useSyncExternalStore } from 'react'
+import loadingStore from '@/services/request/store/loading'
+import LoadingOverlay from '@/components/common/LoadingOverlay'
 
-function App() {
-  const routes = useMemo(() => {
-    return _buildRoutes();
-  }, []);
+export default function App() {
+  const loadingGlobal = useSyncExternalStore(loadingStore.subscribe, loadingStore.getSnapshot)
 
   return (
     <MantineProvider theme={theme} cssVariablesResolver={resolver}>
+      <Notifications position="top-right" zIndex={1000} w={300} />
       <ModalsProvider>
-        <Suspense fallback={<LoadingOverlay visible={true} />}>
-          {useRoutes(routes)}
-        </Suspense>
-        <Notifications position="top-right" zIndex={1000} />
+        <LoadingOverlay visible={loadingGlobal} />
+        <Suspense fallback={<LoadingOverlay visible={true} />}>{useRoutes(routes)}</Suspense>
       </ModalsProvider>
     </MantineProvider>
-  );
-}
-
-export default App;
-
-function _buildRoutes() {
-  return guestRoutes;
+  )
 }
